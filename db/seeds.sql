@@ -38,16 +38,16 @@ VALUES  ("Kyle", "Jordan", 1, null),
         ("Sarah", "Benton", 4, 1),
 
         ("Olivia", "Newton", 5, null),
-        ("Natondra", "Newhaven", 6, 2),
-        ("Michael", "MacDonald", 7, 2),
-        ("Yumi", "Renaud", 8, 2),
+        ("Natondra", "Newhaven", 6, 5),
+        ("Michael", "MacDonald", 7, 5),
+        ("Yumi", "Renaud", 8, 5),
 
         ("Felix", "Benedictus", 9, null),
-        ("Harold", "Barold", 10, 3),
-        ("Reggie", "Newberry", 11, 3),
-        ("Chara", "Gia", 12, 3),
+        ("Harold", "Barold", 10, 9),
+        ("Reggie", "Newberry", 11, 9),
+        ("Chara", "Gia", 12, 9),
 
         ("Waldo", "DeWitt", 13, null),
-        ("Teresa", "Uma", 14, 4),
-        ("Brian", "Sanderson", 15, 4),
-        ("Spot", "Nawtadawg", 16, 4);
+        ("Teresa", "Uma", 14, 13),
+        ("Brian", "Sanderson", 15, 13),
+        ("Spot", "Nawtadawg", 16, 13);
