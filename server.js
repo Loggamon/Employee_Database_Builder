@@ -1,7 +1,11 @@
 const express = require("express");
-//const mysql = require("mysql2");
+const res = require("express/lib/response");
+const mysql = require("mysql2");
+const cTable = require("console.table");
 const inquirer = require("inquirer");
 const sequelize = require("./config/connection");
+
+//const deptQuery = require("./Queries/deptQuery")
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -32,6 +36,17 @@ function questionnaire() {
       switch (data.directory) {
         case "View All Departments":
           console.log("logged!");
+          //const table = cTable.getTable(rows);
+        
+          function callDepts() {
+              sequelize.query(`SELECT * FROM department;`, (err, results) => {
+                if (err) throw err;
+                console.table(results); 
+              });
+          }
+          
+          callDepts();
+
           break;
         case "View All Roles":
           console.log("A");
