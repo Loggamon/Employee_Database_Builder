@@ -10,7 +10,6 @@ const db = mysql.createConnection(
     password: "L30nK3nn3dy!",
     database: "company_db",
   },
-  console.log(`Connected to the company_db database.`)
 );
 
 // function deptQuery() {
