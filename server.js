@@ -9,6 +9,11 @@ const deptQuery = require("./queries/deptQuery");
 const roleQuery = require("./queries/roleQuery");
 const empQuery = require("./queries/empQuery");
 
+const deptArray = ['a', 'b', 'c', 'd']
+//const Dept = require("./models/Dept");
+//const { parse } = require("dotenv");
+//const { json } = require("express/lib/response");
+
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -27,7 +32,12 @@ const db = mysql.createConnection(
 );
 
 
+
+
+
+
 function questionnaire() {
+  console.clear();
   inquirer
     .prompt([
       {
@@ -53,7 +63,7 @@ function questionnaire() {
           },
           {
             name: "Add a Role",
-            value: "ADD_EMPLOYEES",
+            value: "ADD_ROLE",
           },
           {
             name: "Add An Employee",
@@ -84,12 +94,11 @@ function questionnaire() {
           empQuery.callEmps();
           questionnaire();
           break;
-        case "Add A Department":
-          console.log("A");
+        case "ADD_DEPT":
           addDept();
+          questionnaire();
           break;
-        case "Add a Role":
-          console.log("A");
+        case "ADD_ROLE":
           addRole();
           break;
         case "Add An Employee":
@@ -102,23 +111,32 @@ function questionnaire() {
         case "View All Departments":
           console.log("A");
           break;
-        case "Quit":
+        case "QUIT":
+          deptQuery.deptList();
+          console.log(deptArray);
           break;
       }
-    });
+    })
 }
 
 function addDept() {
-  inquirer.prompt([
-    {
-      type: "input",
-      message: "Wat is the name of the new department?",
-      name: "department_name",
-    },
-  ]);
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the name of the new department?",
+        name: "department_name",
+      },
+    ])
+    .then((deptData) => {
+      db.execute(`INSERT INTO department (name, salary) VALUES ('${deptData.department_name}');`);
+
+      questionnaire();
+    })
 }
 
 function addRole() {
+
   inquirer
     .prompt([
       {
@@ -132,25 +150,23 @@ function addRole() {
         name: "role_salary",
       },
       {
-        type: "input",
+        type: "list",
         message: "What department is this position in?",
-        name: "role-dept",
+        name: "role_dept",
+        choices: deptArray,
       },
     ])
-    .then((data) => {
-      switch (data.role_dept) {
-        case "role_name":
-          break;
-        case "View All Roles":
-          console.log("A");
-          break;
-        case "View All Employees":
-          console.log("A");
-          break;
-      }
-    });
+    .then((roleData) => {
+      //db.execute(`INSERT INTO role (title, salary, department_id) VALUES ('${roleData.role_name}', '${roleData.role_salary}', '${roleData.dept}');`);
+      console.log(roleData);
+      questionnaire();
+    })
 }
+
+
 
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => console.log("Now listening"), questionnaire());
 });
+
+module.exports = { questionnaire }

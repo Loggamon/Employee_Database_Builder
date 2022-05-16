@@ -1,5 +1,7 @@
 const mysql = require("mysql2");
-const Dept = require("../models/Dept");
+//const Dept = require("../models/Dept");
+const inquirer = require("inquirer");
+const server = require("../server");
 
 const db = mysql.createConnection(
   {
@@ -12,24 +14,6 @@ const db = mysql.createConnection(
   },
 );
 
-// function deptQuery() {
-//   const sql = `SELECT * FROM department`;
-//   const deptData = await db.query(sql, (err, rows) => {
-//     if (err) {
-//       console.log
-//     }
-//     json(rows);
-//     console.table(res);
-//   });
-// }
-
-// db.execute(`SELECT * FROM department`, function(err, results) {
-//   if (err) {
-//     console.error(err);
-//   }
-//   console.table(results);
-// });
-
 function callDepts() {
   db.execute(`SELECT * FROM department`, function (err, results) {
     if (err) {
@@ -39,4 +23,16 @@ function callDepts() {
   });
 }
 
-module.exports = { callDepts };
+function deptList () {
+  db.execute(`SELECT name FROM department`, function (err, results) {
+    if (err) {
+      console.error(err);
+    }
+    
+    console.log(Object.values(results));
+    
+  });
+}
+
+
+module.exports = { callDepts, deptList };
