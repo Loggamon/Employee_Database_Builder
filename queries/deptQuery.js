@@ -21,6 +21,4 @@ function callDepts() {
   });
 }
 
-fart = 3;
-
 module.exports = { callDepts, };
