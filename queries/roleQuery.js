@@ -17,7 +17,16 @@ function callRoles() {
     if (err) {
       console.error(err);
     }
+    console.log(" ");
     console.table(results);
+    console.log(`
+    
+    
+    
+    
+    
+    
+    `);
   });
 }
 

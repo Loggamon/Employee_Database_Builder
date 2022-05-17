@@ -1,4 +1,7 @@
 # Employee Database Builder  
+
+![A computer terminal running the database program.](./Assets/EDB_Program.png)
+
 ## Description
 
 Why did you decide to build this project?
@@ -58,10 +61,61 @@ If you improve it in any way, please let me know!
 To run this program:
 
 ````
-Not yet!
+This is a snippet of what the program is doing when it retrieves data from th database for inquirer!
+This is for when you want to add a new job for your company!
+
+	function addRole() {
+ 	 db.execute(`SELECT name, id FROM department`, function (err, results) {
+    	if (err) {
+    	  console.error(err);
+	    }
+
+	    const rawList = Object.values(results);
+    	const newList = rawList.map(({ name, id }) => ({ name: name, value: id }));
+
+	    inquirer
+    	  .prompt([
+        	{
+	          type: "input",
+    	      message: "What is the name of the new position?",
+        	  name: "role_name",
+	        },
+    	    {
+        	  type: "number",
+	          message: "What is the salary for this position?",
+    	      name: "role_salary",
+        	},
+	        {
+	          type: "list",
+    	      message: "What department is this position in?",
+        	  name: "role_dept",
+	          choices: newList,
+    	    },
+	      ])
+    	  .then((roleData) => {
+        	const answers = [
+	          roleData.role_name,
+    	      roleData.role_salary,
+        	  roleData.role_dept,
+	        ];
+
+    	    db.execute(
+        	  `INSERT INTO role (title, salary, department_id) VALUES ( ?, ?, ? );`,
+	          answers,
+    	      (err, results) => {
+        	    if (err) {
+            	  console.error(err);
+	            }
+    	      }
+        	);
+        	questionnaire();
+	      });
+	  });
+	}
 
 ````
 
+![The code written for the program; a behind-the-scenes!](./Assets/EDB_Code.png)
 ## Questions
 
 If you have any questions, you can contact me through:

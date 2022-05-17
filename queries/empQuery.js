@@ -1,12 +1,12 @@
 const mysql = require("mysql2");
-const Role = require("../models/Role");
+
 
 const db = mysql.createConnection(
   {
     host: "localhost",
-    // MySQL username,
+    
     user: "root",
-    // TODO: Add MySQL password here
+    
     password: "L30nK3nn3dy!",
     database: "company_db",
   },
@@ -17,7 +17,16 @@ function callEmps() {
     if (err) {
       console.error(err);
     }
+    console.log(' ');
     console.table(results);
+    console.log(`
+    
+    
+    
+    
+    
+    
+    `);
   });
 }
 
