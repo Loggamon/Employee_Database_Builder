@@ -126,5 +126,3 @@ If you have any questions, you can contact me through:
 ## License & Copyright
 
 © Logan Monson
-
-Licensed under [a license yet to be linked...](https://gist.github.com/lukas-h/2a5d00690736b4c3a7ba)
