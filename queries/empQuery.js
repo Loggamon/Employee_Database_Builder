@@ -30,7 +30,7 @@ const db = mysql.createConnection(
 );
 
 function callEmps() {
-  db.execute(`SELECT employee.id as Employee_ID, employee.first_name as First_Name, employee.last_name as Last_Name, role.title as Job_Title, role.salary as Salary, employee.first_name as Manager FROM employee JOIN role ON employee.role_id = role.id`, function (err, results) {
+  db.execute(`SELECT employee.id as Employee_ID, CONCAT (employee.first_name, " ", employee.last_name) as Name, role.title as Title, role.salary as Salary, department.name as Department, CONCAT (manager.first_name, " ", manager.last_name) as Manager FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id INNER JOIN employee AS manager ON employee.manager_id = manager.id;`, function (err, results) {
     if (err) {
       console.error(err);
     }

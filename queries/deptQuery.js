@@ -1,7 +1,5 @@
 const mysql = require("mysql2");
-//const Dept = require("../models/Dept");
 const inquirer = require("inquirer");
-const server = require("../server");
 
 const db = mysql.createConnection(
   {
@@ -23,16 +21,6 @@ function callDepts() {
   });
 }
 
-function deptList () {
-  db.execute(`SELECT name FROM department`, function (err, results) {
-    if (err) {
-      console.error(err);
-    }
-    
-    console.log(Object.values(results));
-    
-  });
-}
+fart = 3;
 
-
-module.exports = { callDepts, deptList };
+module.exports = { callDepts, };

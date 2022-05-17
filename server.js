@@ -9,7 +9,7 @@ const deptQuery = require("./queries/deptQuery");
 const roleQuery = require("./queries/roleQuery");
 const empQuery = require("./queries/empQuery");
 
-const deptArray = ['a', 'b', 'c', 'd']
+//const deptArray = deptQuery.deptList();
 //const Dept = require("./models/Dept");
 //const { parse } = require("dotenv");
 //const { json } = require("express/lib/response");
@@ -96,24 +96,18 @@ function questionnaire() {
           break;
         case "ADD_DEPT":
           addDept();
-          questionnaire();
           break;
         case "ADD_ROLE":
           addRole();
           break;
-        case "Add An Employee":
-          console.log("A");
-
+        case "ADD_EMPLOYEES":
+          addEmployee();
           break;
-        case "Update An Employee Role":
-          console.log("A");
-          break;
-        case "View All Departments":
+        case "UPDATE_EMPLOYEE":
           console.log("A");
           break;
         case "QUIT":
-          deptQuery.deptList();
-          console.log(deptArray);
+          console.clear();
           break;
       }
     })
@@ -136,31 +130,100 @@ function addDept() {
 }
 
 function addRole() {
+  db.execute(`SELECT name, id FROM department`, function (err, results) {
+    if (err) {
+      console.error(err);
+    }
+    
+    const rawList = Object.values(results);
+    const newList = rawList.map(({name, id}) => ({name: name, value: id}));
 
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        message: "What is the name of the new position?",
-        name: "role_name",
-      },
-      {
-        type: "number",
-        message: "WHat is the salary for this position?",
-        name: "role_salary",
-      },
-      {
-        type: "list",
-        message: "What department is this position in?",
-        name: "role_dept",
-        choices: deptArray,
-      },
-    ])
-    .then((roleData) => {
-      //db.execute(`INSERT INTO role (title, salary, department_id) VALUES ('${roleData.role_name}', '${roleData.role_salary}', '${roleData.dept}');`);
-      console.log(roleData);
-      questionnaire();
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "What is the name of the new position?",
+          name: "role_name",
+        },
+        {
+          type: "number",
+          message: "What is the salary for this position?",
+          name: "role_salary",
+        },
+        {
+          type: "list",
+          message: "What department is this position in?",
+          name: "role_dept",
+          choices: newList
+        }
+      ])
+      .then((roleData) => {
+        const answers = [roleData.role_name, roleData.role_salary, roleData.role_dept];
+
+        db.execute(`INSERT INTO role (title, salary, department_id) VALUES ( ?, ?, ? );`, answers, (err, results) => {
+          if (err) {
+            console.error(err);
+          }
+        })
+        questionnaire();
     })
+  })  
+}
+
+function addEmployee() {
+  db.execute(`SELECT title, id FROM role`, function (err, roleResults) {
+    if (err) {
+      console.error(err);
+    }
+    
+    const rawList = Object.values(roleResults);
+    const roleList = rawList.map(({title, id}) => ({name: title, value: id}));
+
+    db.execute(`SELECT CONCAT (first_name, " ", last_name) AS name, id FROM employee`, function (err, managerResults) {
+      if (err) {
+        console.error(err);
+      }
+      
+      const rawList = Object.values(managerResults);
+      const managerList = rawList.map(({name, id}) => ({name: name, value: id}));
+      
+      inquirer
+        .prompt([
+          {
+            type: "input",
+            message: "What is the first name of the employee?",
+            name: "emp_fname",
+          },
+          {
+            type: "input",
+            message: "What is their last name?",
+            name: "emp_lname",
+          },
+          {
+            type: "list",
+            message: "What role does this employee have?",
+            name: "emp_role",
+            choices: roleList
+          },
+          {
+            type: "list",
+            message: "Who is their boss?",
+            name: "emp_manager",
+            choices: managerList
+          }
+        ])
+        .then((empData) => {
+          const answers = [empData.emp_fname, empData.emp_lname, empData.emp_role, empData.emp_manager];
+
+          db.execute(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ( ?, ?, ?, ? );`, answers, (err, results) => {
+            if (err) {
+              console.error(err);
+            }
+          })
+          questionnaire();
+      })
+    })  
+  })
 }
 
 
@@ -168,5 +231,3 @@ function addRole() {
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => console.log("Now listening"), questionnaire());
 });
-
-module.exports = { questionnaire }
